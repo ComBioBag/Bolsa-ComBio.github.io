@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
+    
+    <title>Compostable BioBag - Atención al Cliente</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f0f8f5;
+        }
+
+        /* Encabezado de la página */
+        #header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 20px;
+            background-color: #2e7d32;
+            color: #fff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        #header img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+            border-radius: 50%;
+        }
+
+        #header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        /* Contenedor para el mensaje de bienvenida y el botón */
+        #main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            margin-top: 80px; /* Espacio para el encabezado */
+            margin-bottom: 60px; /* Espacio para el pie de página */
+        }
+
+        #welcome-message {
+            text-align: center;
+            max-width: 600px;
+            margin-bottom: 30px;
+            font-size: 18px;
+            color: #333;
+        }
+
+        /* Botón para mostrar el chatbot centrado */
+        #toggle-chatbot-button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #2e7d32;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        /* Contenedor de imágenes */
+        .image-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .image-container img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        /* Contenedor del chatbot */
+        #chatbot-container {
+            width: 300px;
+            height: 450px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            display: none; /* Oculto por defecto */
+            flex-direction: column;
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        #chatbot-header {
+            display: flex;
+            align-items: center;
+            background-color: #2e7d32;
+            color: #fff;
+            padding: 10px;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+
+        #chatbot-header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        #chatbot-header h1 {
+            font-size: 16px;
+            margin: 0;
+        }
+
+        #messages {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+        }
+
+        .message {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        .user-message {
+            background-color: #e8f5e9;
+            text-align: right;
+        }
+
+        .bot-message {
+            background-color: #c8e6c9;
+            text-align: left;
+        }
+
+        #user-input-container {
+            display: flex;
+            padding: 10px;
+        }
+
+        #user-input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        #send-button {
+            padding: 8px 16px;
+            margin-left: 5px;
+            border: none;
+            background-color: #2e7d32;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        /* Pie de página */
+        #footer {
+            width: 100%;
+            padding: 15px;
+            background-color: #2e7d32;
+            color: #fff;
+            text-align: center;
+            font-size: 14px;
+            position: fixed;
+            bottom: 0;
+        }
+
+        #footer .social-icons {
+            margin-top: 10px;
+        }
+
+        #footer .social-icons a {
+            color: #fff;
+            margin: 0 10px;
+            font-size: 20px;
+            text-decoration: none;
+        }
+
+        #footer .social-icons a:hover {
+            color: #b2fab4;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="header">
+        <img src="img/plantita.png" alt="Icono de Compostable BioBag"> 
+        <h1>Compostable BioBag</h1>
+    </div>
+
+    <div id="main-content">
+        <div id="welcome-message">
+            <p>Bienvenido/a a nuestro servicio de atención al cliente de Compostable BioBag, empresa especializada en la elaboración de productos biodegradables y sostenibles 🌱.</p>
+        </div>
+
+        <div class="image-container">
+            <img src="img/imagen 1.jpeg" alt="Imagen 1">
+            <img src="img/imagen 2.jpeg" alt="Imagen 2">
+            <img src="img/imagen 3.jpeg" alt="Imagen 3">
+        </div>
+      <br>
+        <button id="toggle-chatbot-button">ChatBio</button>
+    </div>
+
+    <div id="chatbot-container">
+        <div id="chatbot-header">
+            <img src="img/plantita.png" alt="Avatar de Compostable BioBag"> 
+            <h1>Compostable BioBag</h1>
+        </div>
+
+        <div id="messages"></div>
+
+        <div id="user-input-container">
+            <input type="text" id="user-input" placeholder="Escribe tu pregunta aquí...">
+            <button id="send-button">Enviar</button>
+        </div>
+    </div>
+
+    <footer id="footer">
+        <p>Dirección: Calle 123, Tenjo, Cundinamarca, Colombia</p>
+        <div class="social-icons">
+            <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+            <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+            <a href="#" aria-label="Whatsapp"><i class="bi bi-whatsapp"></i></a>
+        </div>
+    </footer>
+
+    <script>
+        const chatbotContainer = document.getElementById("chatbot-container");
+        const toggleChatbotButton = document.getElementById("toggle-chatbot-button");
+        const messagesContainer = document.getElementById("messages");
+        const userInput = document.getElementById("user-input");
+        const sendButton = document.getElementById("send-button");
+
+        const responses = {
+            "¿Qué tipos de productos biodegradables ofrecen?": [
+                "Puedes encontrar productos como: bolsas, envases y cubiertos biodegradables.",
+                "Excelente, si buscas utensilios y vajillas de hoja de plátano o caña de azúcar."
+            ],
+            "¿De qué materiales están hechos sus productos?": [
+                "Nuestros productos son a base de residuos de la yuca y el maíz.",
+                "Puedes encontrar productos elaborados con hojas de plátano y los residuos de caña de azúcar (bagazo)."
+            ],
+            "¿Cuánto tiempo tardan en degradarse los productos?": [
+                "Nuestros productos son a base de residuos de la yuca y el maíz.",
+                "La degradación de productos depende del tipo de material y de las condiciones ambientales como la temperatura, la humedad, y la exposición al sol o microorganismos"
+            ],
+            "¿Son sus productos completamente compostable o solo biodegradables?" : [
+                "Si, nuestros los productos a base de maíz o yuca, son compostables."
+            ],
+            "¿En qué se diferencian sus productos de otros productos biodegradables en el mercado?" : [
+            "La diferenciación, en este caso, reside en ofrecer productos realmente sostenibles, alineados con los valores y las necesidades del cliente consciente y del mercado internacional.",
+            "Ventajas Ambientales, reducción de la Contaminación, conservación de la biodiversidad, apoyo a la economía local, menor huella de carbono.",
+            "Ventajas de Mercado y Diferenciación Competitiva, atractivo para el Consumidor consciente, Cumplimiento de Normativas Ambientales, posicionamiento de marca como empresa sostenible."
+            ],
+
+            "¿Dónde fabrican sus productos? ¿Son locales?" : [
+            "Nuestros productos son fabricados en Tenjo, Cundinamarca.",
+            "Al emplear materias primas locales como residuos de la yuca, el maíz, la hoja de plátano, el fique y el yute, se fortalece la economía de pequeños agricultores y productores locales."
+            ],
+            "¿Cuáles son los beneficios de usar productos biodegradables frente a los de plástico convencional?" : [
+            "Los productos biodegradables y de origen local suelen requerir menos energía y menos transporte, lo que disminuye la huella de carbono."
+            ],
+            "¿Ofrecen envíos a toda Colombia?": [
+            "Así es, realizamos envíos a todo Colombia, mediante empresas de transporte certificadas.",
+            " Realizamos envíos a todo el país, de manera ágil y segura."
+            ],
+            "¿Qué medidas toman para asegurar una producción sostenible?": [
+            "Nos aseguramos que sea una producción sostenible mediante Certificaciones Ambientales, esto muestra transparencia y compromiso real con la sostenibilidad.",
+            "Utilizar materias primas colombianas refuerza el compromiso con la economía local y la biodiversidad.",
+            "Utilización de embalajes igualmente biodegradables o reciclables y comunicarlo en la estrategia de marca."
+            ],
+            "¿Puedo comprar sus productos al por mayor o al detal?": [
+            "Puedes adquirir nuestros productos al detal en las siguientes cantidades, 01 a 100 unidades, 100 a 500 unidades, 500 a 1000 unidades.",
+            "Al por mayor, más de 1000 unidades" 
+            ],
+            "¿Qué garantías ofrecen sobre la biodegradabilidad de sus productos?": [
+            "Puedes estar seguro de nuestros productos mediante las etiquetas y garantías de Biodegradabilidad.",
+            "No te preocupes, nuestros productos son sometidos a pruebas de laboratorio y estudios de descomposición."
+            ],
+            "¿Tienen programas de reciclaje o de devolución de envases?": [
+            "Correcto, contamos con programas de devolución de envases para reutilización.",
+            "Así es, generamos reciclaje de envases con socios especializados, de igual manera, nuestros envases compostables con instrucciones para el consumidor."
+            ],
+            "¿Qué impacto tienen sus productos en el medio ambiente al degradarse?": [
+            "Nuestros productos reducción de residuos persistentes, evitan la contaminación química",
+            "Existen impactos positivos tales como contribución a la Fertilidad del Suelo y Menor Emisión de Gases de Efecto Invernadero."
+            ],
+            "¿Ofrecen asesoramiento para empresas que desean hacer la transición a productos biodegradables?" : [
+            "Así es, ofrecemos asesoría a empresas desean hacer la transición a productos biodegradables.",
+            "Si quieres una asesoría personalizada, puedes comunicarte al +57 3025712291."
+            ],
+            
+        };
+
+        function addMessage(message, sender) {
+            const messageElement = document.createElement("div");
+            messageElement.classList.add("message", sender === "user" ? "user-message" : "bot-message");
+            messageElement.innerText = message;
+            messagesContainer.appendChild(messageElement);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function sendMessage() {
+            const userText = userInput.value.trim();
+            if (userText) {
+                addMessage(userText, "user");
+                userInput.value = "";
+
+                const response = getResponse(userText);
+                setTimeout(() => {
+                    addMessage(response, "bot");
+                }, 500);
+            }
+        }
+
+        function getResponse(userText) {
+            const response = responses[userText];
+            if (response) {
+                const randomIndex = Math.floor(Math.random() * response.length);
+                return response[randomIndex];
+            } else {
+                return "Lo siento, no tengo una respuesta para esa pregunta. ¿Podrías preguntar algo relacionado con nuestros productos o servicios?";
+            }
+        }
+
+        sendButton.addEventListener("click", sendMessage);
+        userInput.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        });
+
+        
+        toggleChatbotButton.addEventListener("click", () => {
+            chatbotContainer.style.display = chatbotContainer.style.display === "none" ? "flex" : "none";
+        });
+    </script>
+
+</body>
+</html>
